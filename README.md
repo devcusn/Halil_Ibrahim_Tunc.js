@@ -2,7 +2,7 @@
 
 A JavaScript script developed for the E-Commerce website that displays product recommendations in carousel format.
 
-### Temel Kullanım
+### Basic Usage
 
 ```javascript
 const app = new ProductCarouselApp({
@@ -13,7 +13,7 @@ const app = new ProductCarouselApp({
 app.init();
 ```
 
-**Note**: The app inserts the HTML element right after the target element.
+Note: The ProductCarouselApp inserts the carousel element right after the target element.
 
 ### Customization
 
