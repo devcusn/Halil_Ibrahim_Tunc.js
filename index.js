@@ -86,11 +86,11 @@
       const createProductHTML = (product) => `
             <a href="${product.url}" target="_blank" class="product-card-link">
               <div class="product-card">
-                <div class="product-image-container">
+                <div class="product-card__image-container">
                   <img src="${product.img}" alt="${product.name}" />
                   <div class="favorite-btn" data-product-id="${product.id}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="26" height="23" viewBox="0 0 26 23" fill="none">
-                      <g id="Group 3">
+                      <g>
                         <g id="heart">
                           <path id="Shape" fill-rule="evenodd" clip-rule="evenodd" 
                                 d="M22.6339 2.97449C21.4902 1.83033 19.9388 1.1875 18.3211 1.1875C16.7034 1.1875 15.152 1.83033 14.0084 2.97449L12.8332 4.14968L11.658 2.97449C9.27612 0.592628 5.41435 0.592627 3.03249 2.97449C0.650628 5.35635 0.650628 9.21811 3.03249 11.6L4.20769 12.7752L12.8332 21.4007L21.4587 12.7752L22.6339 11.6C23.778 10.4564 24.4208 8.90494 24.4208 7.28723C24.4208 5.66952 23.778 4.11811 22.6339 2.97449Z" 
@@ -100,49 +100,47 @@
                     </svg>
                   </div>
                 </div>
-                <div class="product-info">
-                  <h2 class="product-title">
-                    <b class="brand-name">${
-                      product.brand
-                    }</b> - ${product.name.trim()}
+                <div class="product-card__info">
+                  <h2 class="product-card__title">
+                    <b>${product.brand}</b> - ${product.name.trim()}
                   </h2>
-                  <div class="rating">
-                    <div class="stars">
+                  <div class="product-card__rating">
+                    <div class="product-card__rating_stars">
                       <span class="star filled">★</span>
                       <span class="star filled">★</span>
                       <span class="star filled">★</span>
                       <span class="star filled">★</span>
                       <span class="star filled">★</span>
                     </div>
-                    <span class="rating-count">(${
+                    <span class="product-card__rating_count">(${
                       Math.floor(Math.random() * 50) + 10
                     })</span>
                   </div>
                   ${
                     product.original_price > product.price
-                      ? `<div class="price-container">
+                      ? `<div class="product-card__price">
                          <div>
-                           <span class="original-price">${product.original_price.toFixed(
+                           <span class="product-card__price_original">${product.original_price.toFixed(
                              2
                            )} TL</span> 
-                           <span class='discount-item__percent'>%${(
+                           <span class='product-card__price_percent'>%${(
                              ((product.original_price - product.price) /
                                product.original_price) *
                              100
                            ).toFixed(0)}</span> 
-                           <span class="discount-item__badge">↓</span>
+                           <span class="product-card__price_badge">↓</span>
                          </div>
-                         <span class="discount-price">${product.price.toFixed(
+                         <span class="product-card__price_discount">${product.price.toFixed(
                            2
                          )} TL</span>
                        </div>`
-                      : `<div class="price-container">
-                         <span class="current-price">${product.price.toFixed(
+                      : `<div class="product-card__price">
+                         <span class="product-card__price_current">${product.price.toFixed(
                            2
                          )} TL</span>
                          ${
                            product.original_price > product.price
-                             ? `<span class="original-price">${product.original_price.toFixed(
+                             ? `<span class="product-card__price_original">${product.original_price.toFixed(
                                  2
                                )} TL</span>`
                              : ""
@@ -150,7 +148,7 @@
                        </div>`
                   }
                 </div>
-                <div class="card-action">  
+                <div class="product_card__actions">  
                   <button class="add-to-cart-btn">Sepete Ekle</button>
                 </div>
               </div>
@@ -158,12 +156,12 @@
           `;
 
       const html = `
-            <div class="product-carousel-container">
-              <div class="carousel-header">
-                <h2>Beğenebileceğinizi Düşündüklerimiz</h2>
+            <div class="product-carousel">
+              <div class="product-carousel__header">
+                <h2 class="product-carousel__title">Beğenebileceğinizi Düşündüklerimiz</h2>
               </div>
-              <div class="product-carousel">
-                <div class="product-list">
+              <div class="product-carousel__container">
+                <div class="product-carousel__list">
                   ${this.query.data.map(createProductHTML).join("")}
                 </div>
                 <button class="nav-btn prev">‹</button>
@@ -179,7 +177,7 @@
 
     buildCSS = () => {
       const css = `
-            .product-carousel-container {
+            .product-carousel {
               margin: 40px auto;
               padding: 0 15px;
               font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
@@ -188,7 +186,7 @@
               min-width: 100%;
             }
     
-            .carousel-header {
+            .product-carousel__header {
               display: flex;
               justify-content: space-between;
               align-items: center;
@@ -198,7 +196,7 @@
               padding: 25px 67px;
             }
     
-            .carousel-header h2 {
+            .product-carousel__title {
               font-size: 3rem;
               font-weight: 600;
               color: #f28e00;
@@ -206,11 +204,23 @@
               letter-spacing: -0.5px;
             }
     
-            .product-carousel {
+            .product-carousel__container {
               position: relative;
               margin-top: 20px;
               background-color: #ffffff;
               overflow: visible; 
+            }
+
+            .product-carousel__list {
+              display: flex;
+              gap: 20px;
+              overflow-x: auto;
+              scroll-behavior: smooth;
+              padding: 10px 0px 20px 0px;
+              overflow: hidden;
+              border-bottom-left-radius: 35px;
+              border-bottom-right-radius: 35px;
+              box-shadow: rgba(235, 235, 235, 0.5) 15px 15px 30px 0px;
             }
     
             .nav-btn {
@@ -253,19 +263,7 @@
               color: none;
             }
     
-            .product-list {
-              display: flex;
-              gap: 20px;
-              overflow-x: auto;
-              scroll-behavior: smooth;
-              padding: 10px 0px 20px 0px;
-              overflow: hidden;
-              border-bottom-left-radius: 35px;
-              border-bottom-right-radius: 35px;
-              box-shadow: rgba(235, 235, 235, 0.5) 15px 15px 30px 0px;
-            }
-    
-            .card-action {
+            .product_card__actions {
               padding: 0px 17px 13px 17px;
             }
     
@@ -331,13 +329,13 @@
               background: #ffcccc;
             }
     
-            .discount-price {
+            .product-card__price_discount {
               color: #00a365;
               font-weight: 600;
               font-size: 2.2rem;
             }
     
-            .discount-item__badge {
+            .product-card__price_badge{
               display: inline-flex;
               justify-content: center;
               align-items: center;
@@ -349,18 +347,18 @@
               font-size: 14px;
             }
     
-            .discount-item__percent {
+            .product-card__price_percent {
               color: #00a365;
               font-size: 18px;
               font-weight: 800;
             }
     
-            .product-info {
+            .product-card__info {
               padding: 0px 17px 13px 17px;
               flex-grow: 1;
             }
     
-            .product-title {
+            .product-card__title {
               font-size: 1.2rem;
               height:42px;
               margin-bottom:10px;
@@ -369,14 +367,14 @@
               overflow: hidden;
             }
     
-            .rating {
+            .product-card__rating {
               display: flex;
               align-items: center;
               gap: 6px;
               margin-bottom: 12px;
             }
     
-            .stars {
+            .product-card__rating_stars{
               display: flex;
               flex-wrap:wrap;
               gap: 6px;
@@ -389,23 +387,23 @@
               font-weight:900;
             }
     
-            .rating-count {
+            .product-card__rating_count {
               font-size: 12px;
               color: #7d7d7d;
             }
     
-            .price-container {
+            .product-card__price {
               gap: 8px;
               margin-bottom: 8px;
             }
     
-            .current-price {
+            .product-card__price_current {
               font-size: 2.2rem;
               font-weight: 600;
               color: #7d7d7d;
             }
     
-            .original-price {
+            .product-card__price_original{
               font-size: 14px;
               color: #7d7d7d;
               font-weight: 400;
@@ -491,7 +489,7 @@
             }
     
             @media (max-width: 1280px) {
-              .product-carousel-container {
+              .product-carousel {
                 max-width: 1320px;
               }
               
@@ -501,7 +499,7 @@
             }
     
             @media (max-width: 992px) {
-              .product-carousel-container {
+              .product-carousel {
                 max-width: 960px;
               }
               
@@ -511,7 +509,7 @@
             }
     
             @media (max-width: 768px) {
-              .product-carousel-container {
+              .product-carousel {
                 max-width: 720px;
               }
               
@@ -521,7 +519,7 @@
             }
     
             @media (max-width: 576px) {
-              .product-carousel-container {
+              .product-carousel {
                 max-width: 540px;
               }
               
@@ -530,27 +528,23 @@
               }
             }
             @media (max-width: 480px) {
-              .product-carousel-container {
+              .product-carousel {
                 width:100%
                 background-color:none;
               }
-                .carousel-header {
+              .product-carousel__header {
                 background-color:#ffffff;
                 padding: 0px 22px 0px 10px;
-
-                }
-                .carousel-header h2 {
+              }
+              .product-carousel__title{
                 font-size: 2.2rem;
                 font-weight:700;
                 font-family:Quicksand-Bold;
-                }
-               
-            
-                .product-list {
+              }
+              .product-carousel__list {
                 box-shadow: none;
                 background-color:none;
-                }
-              
+              }
               .product-card {
                 width: calc(50vw - 20px);
               }
@@ -563,7 +557,7 @@
     };
 
     setEvents = () => {
-      const productList = document.querySelector(".product-list");
+      const productList = document.querySelector(".product-carousel__list");
       const prevBtn = document.querySelector(".nav-btn.prev");
       const nextBtn = document.querySelector(".nav-btn.next");
 
@@ -620,12 +614,12 @@
       };
 
       const html = `
-            <div class="product-carousel-container">
-              <div class="carousel-header">
-                <h2>Beğenebileceğinizi Düşündüklerimiz</h2>
+            <div class="product-carousel">
+              <div class="product-carousel__header">
+                <h2 class="product-carousel__title">Beğenebileceğinizi Düşündüklerimiz</h2>
               </div>
-              <div class="product-carousel">
-                <div class="product-list">
+              <div class="product-carousel__container">
+                <div class="product-carousel__list">
                   ${Array.from({ length: 10 })
                     .map((_, i) => createProductSkeletonHTML(i))
                     .join("")}
@@ -640,7 +634,7 @@
     };
 
     removeSkeleton = () => {
-      const element = document.querySelector(".product-carousel-container");
+      const element = document.querySelector(".product-carousel");
       if (element) {
         element.remove();
       }
