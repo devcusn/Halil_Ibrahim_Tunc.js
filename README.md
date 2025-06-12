@@ -17,20 +17,11 @@ Note: The ProductCarouselApp inserts the carousel element right after the target
 
 ### Customization
 
-#### Using Different API Endpoint
+#### Using Different API Endpoint or Target Element
 
 ```javascript
 const app = new ProductCarouselApp({
   targetElement: ".my-target-element",
-  url: "https://api.example.com/products",
-});
-```
-
-#### Using Different Target Element
-
-```javascript
-const app = new ProductCarouselApp({
-  targetElement: "#product-container",
   url: "https://api.example.com/products",
 });
 ```

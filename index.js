@@ -1,6 +1,7 @@
 (() => {
   class ProductCarouselApp {
     constructor({ targetElement, url }) {
+      this.targetElementName = targetElement;
       this.targetElement = document.querySelector(targetElement);
       this.url = url;
       this.query = {
@@ -169,6 +170,7 @@
               </div>
             </div>
           `;
+      this.targetElement = document.querySelector(this.targetElementName);
 
       if (this.targetElement && this.targetElement.parentNode) {
         this.targetElement.insertAdjacentHTML("afterend", html);
@@ -647,8 +649,44 @@
       this.updateFavoriteButtons();
     };
 
+    checkBrowserHistory = () => {
+      const history = window.history;
+      const pushState = history.pushState;
+      const replaceState = history.replaceState;
+
+      const onUrlChange = () => {
+        let el = document.querySelector(".product-carousel");
+        if (window.location.href !== "https://www.e-bebek.com/") {
+          console.log("Wrong page");
+          if (el) el.remove();
+        } else {
+          setTimeout(() => {
+            let el = document.querySelector(".product-carousel");
+            if (el) return;
+            this.renderCarousel();
+          }, 1000);
+        }
+      };
+
+      history.pushState = function (...args) {
+        pushState.apply(history, args);
+        onUrlChange();
+      };
+
+      history.replaceState = function (...args) {
+        replaceState.apply(history, args);
+        onUrlChange();
+      };
+
+      window.addEventListener("popstate", onUrlChange);
+    };
+
     init = async () => {
       try {
+        if (window.location.href !== "https://www.e-bebek.com/") {
+          throw new Error("Wrong page");
+        }
+        this.checkBrowserHistory();
         this.buildCSS();
         this.renderSkeleton();
         await this.fetchProducts();
@@ -658,11 +696,6 @@
         console.log(err);
       }
     };
-  }
-
-  if (window.location.href !== "https://www.e-bebek.com/") {
-    console.error("Wrong page");
-    return;
   }
 
   const app = new ProductCarouselApp({
