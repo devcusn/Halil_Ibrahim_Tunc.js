@@ -25,3 +25,13 @@ const app = new ProductCarouselApp({
   url: "https://api.example.com/products",
 });
 ```
+
+## Issue
+
+### SPA Problem
+
+In client-side rendering applications, we need to manually remove the carousel we added. That's why the checkBrowserHistory() function was implemented.
+
+- Check URL changes
+- Hides the carousel on the wrong pages
+- Shows it again when you return to the homepage
